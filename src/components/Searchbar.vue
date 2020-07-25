@@ -18,7 +18,8 @@ export default {
   },
   watch: {
     search: function() {
-      this.$emit('updateSearch',this.search)
+      this.$store.commit('updateSearch', { 'search': this.search })
+      this.$store.commit('searchProducts')
     },
   },
 };

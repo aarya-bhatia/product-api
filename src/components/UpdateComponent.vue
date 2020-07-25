@@ -48,21 +48,26 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   name: "UpdateComponent",
   data() {
     return {
-        name: null,
-        description: null,
-        price: null,
-        feedback: null,
-        selectedProduct: null,
-        dropdownState: false,
+      name: null,
+      description: null,
+      price: null,
+      feedback: null,
+      selectedProduct: null,
+      dropdownState: false,
     };
   },
-  props: ["products", "newEditItem"],
+  computed: {
+    products() {
+      return this.$store.state.productsLocal;
+    },
+    itemToEdit() {
+      return this.$store.state.itemToEdit;
+    },
+  },
   methods: {
     selectItem(product) {
       this.selectedProduct = product;
@@ -77,58 +82,43 @@ export default {
       this.dropdownState = !this.dropdownState;
     },
     updateItem() {
-      if (
-        this.selectedProduct &&
-        this.name &&
-        this.description &&
-        this.price
-      ) {
+      if (this.selectedProduct && this.name && this.description && this.price) {
         this.feedback = null;
 
-        //local update
-        this.$emit('updateProduct', 
-        {
-            'product':this.selectedProduct,
-            'args': {
-                'name': this.name,
-                'description': this.description,
-                'price': this.price
-            }
-        })
-
-        //put request to api
-        axios
-          .put(`${this.$api}${this.selectedProduct.id}`, {
+        const newProduct = {
+          id: this.selectedProduct.id,
+          args: {
             name: this.name,
             description: this.description,
             price: this.price,
-          })
-          .then(() => {
-            console.log("Updated Item");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+          },
+        };
+
+        this.$store.commit("updateProduct", { newProduct });
 
         this.name = null;
         this.description = null;
         this.price = null;
         this.selectedProduct = null;
+
         if (!this.dropdownState) {
           this.dropdownState = true;
         }
+
+        this.$store.dispatch("updateProduct", { newProduct });
       } else {
         this.feedback = "You must enter all fields";
       }
-    }
+    },
   },
   watch: {
-    newEditItem: function() {
-      console.log(this.newEditItem)
-      this.selectItem(this.newEditItem)
-      this.dropdownState = true
-    }
-  }
+    itemToEdit: function () {
+      this.selectItem(this.itemToEdit);
+      if (!this.dropdownState) {
+        this.dropdownState = true;
+      }
+    },
+  },
 };
 </script>
 

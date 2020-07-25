@@ -30,8 +30,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   name: "CreateComponent",
   data() {
@@ -51,32 +49,25 @@ export default {
         this.feedback = null;
       }
 
-      const newProduct = {
+      //unique id
+      let id = Date.now() + String(Math.round(Math.random()))
+      //console.log("ID:",id)
+
+      const product = {
+        id: id,
         name: this.name,
         description: this.description,
         price: this.price,
       };
 
-      // Update local copy of products array
-      this.$emit('addProduct', newProduct)
-
-      // research the new products
-      this.$emit('searchItems')
+      this.$store.commit("addProduct", { product }); // add locally
+      this.$store.dispatch("addProduct", { product }); // add to firestore
+      this.$store.commit("searchProducts"); // reset search products
 
       // Reset input fields
       this.name = this.description = this.price = null;
-
-      // post request to api for create new document
-      axios
-        .post(this.$api, newProduct)
-        .then(() => {
-          console.log("Added Item");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
-  }
+  },
 };
 </script>
 

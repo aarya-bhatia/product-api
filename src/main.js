@@ -1,16 +1,12 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import store from './store'
 
 Vue.config.productionTip = false
 
-Vue.prototype.$api = "https://social-app-1-dbb91.web.app/api/"
-
 new Vue({
-  beforeCreate(){
-    console.log(this.$api)
-  },
-
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')
