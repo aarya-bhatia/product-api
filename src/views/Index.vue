@@ -52,6 +52,7 @@ export default {
   },
   methods: {
     addProduct(newProduct) {
+      console.log(newProduct);
       this.allProducts.push(newProduct);
     },
     editItem(product) {
@@ -60,8 +61,10 @@ export default {
     updateProduct(newProduct) {
       console.log(newProduct);
       const p = this.allProducts.filter((product) => {
-        product.id === newProduct.product.id;
+        return product.id == newProduct.product.id;
       })[0];
+
+      console.log(p);
 
       p.name = newProduct.args.name;
       p.description = newProduct.args.description;
@@ -90,8 +93,14 @@ export default {
         });
     },
     searchItems() {
+      if(!this.search) {
+        this.products = this.allProducts
+        return
+      }
       const searchString = this.search.toLowerCase();
+      console.log('search:',searchString);
       this.products = this.allProducts.filter((product) => {
+        console.log(product)
         return product.name.toLowerCase().includes(searchString);
       });
     },

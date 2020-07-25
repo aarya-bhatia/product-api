@@ -58,7 +58,7 @@ export default {
       };
 
       // Update local copy of products array
-      this.$emit('addProduct', 'newProduct')
+      this.$emit('addProduct', newProduct)
 
       // research the new products
       this.$emit('searchItems')

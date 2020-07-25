@@ -1,9 +1,9 @@
 <template>
-  <div class="navbar container">
+  <div class="navbar">
     <nav>
       <div class="nav-wrapper">
         <ul class="center">
-          <li>
+          <li class="right" style="position: absolute; right: 5%">
             <a href="#new-product">
               <i class="material-icons">add</i>
             </a>
@@ -25,7 +25,7 @@ export default {
 
 <style>
 nav {
-  margin: 20px 0;
+  margin-bottom: 20px;
   background: teal;
 }
 </style>
